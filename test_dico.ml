@@ -103,4 +103,4 @@ let mon_jeu = lire_fichier file;; (* on parse le fichier *)
 print_jeu mon_jeu;; (*affichage de jeu*)
 
 
-let a = 5;;
+let a = 5;; 
