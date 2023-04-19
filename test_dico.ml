@@ -108,3 +108,5 @@ let a = 5;;
 let testv2 = "ça va marcher";;
 
 let b = 0;;
+
+let b = 0;;
