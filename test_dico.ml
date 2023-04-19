@@ -95,6 +95,7 @@ let lire_fichier (file: string) : jeu =
 
 
 
+
 let file:string = ( if (Array.length Sys.argv == 2)
 then Sys.argv.(1) (*le fichier est donné en argument*)
 else "test.liz");; (*nom de fichier pas defaut*)
