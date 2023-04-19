@@ -105,3 +105,4 @@ print_jeu mon_jeu;; (*affichage de jeu*)
 
 
 let a = 5;; 
+let testv2 = "ça va marcher";;
