@@ -25,8 +25,8 @@ Le but du jeu est de completer la grille en suivant ces 3 règles:
 3) On ne peux pas coller cote a cote deux pairs (mais on peut diagonalement).
 
 #### Exemples.
-![clipboard.png](4-d16SvDy-clipboard.png)  
-![clipboard.png](1ISxRO6z--clipboard.png)
+![clipboard.png](imgs_CR/4-d16SvDy-clipboard.png)  
+![clipboard.png](imgs_CR/1ISxRO6z--clipboard.png)
 #### Contraintes & Remarques.
 
 Il y a une unique solution si la grille est générée correctement.
@@ -34,18 +34,18 @@ Il y a une unique solution si la grille est générée correctement.
 Nous avons remarquée plusieurs cas qui permette d'avancer dans la grille :
 
 - Les zones constituées d'exactement deux cases sont toujours a coloriées elles feront toujours partie de la solution finale.  
-![clipboard.png](BcFHlXpTo-clipboard.png)   
+![clipboard.png](imgs_CR/BcFHlXpTo-clipboard.png)   
 - Toutes les cases cote à cote aux cases coloriées deviennent donc inutilisable car ne respectent plus la règle N°3  
-![clipboard.png](7p8xVc9AC-clipboard.png)  
+![clipboard.png](imgs_CR/7p8xVc9AC-clipboard.png)  
 - Toutes les cases seules et entourées par des cases inutilisable deviennent aussi inutilisable.  
-![clipboard.png](GLAOad3RQ-clipboard.png)
+![clipboard.png](imgs_CR/GLAOad3RQ-clipboard.png)
 - Les zones dans lequels il ne reste plus que deux cases peuvent etre coloriées.   
- ![clipboard.png](RDsKrSsfl-clipboard.png)  
+ ![clipboard.png](imgs_CR/RDsKrSsfl-clipboard.png)  
 - Ensuite on peut completer les cases coloriées qui ne sont pas par pair et qui n'ont plus que une seule solution.  
-![clipboard.png](643cUiGxS-clipboard.png)  
+![clipboard.png](imgs_CR/643cUiGxS-clipboard.png)  
 
 Et apres on peut réutiliser les étapes précédentes jusqu'a ce que notre grille soit complétée.  
-![clipboard.png](eB6q0Mok_-clipboard.png)  
+![clipboard.png](imgs_CR/eB6q0Mok_-clipboard.png)  
 (Attention ces étapes ne sont pas exhaustive, il existe tres probablement des grilles dans lequels appliquer ces étapes ne suffisent pas.)
 
 
@@ -274,7 +274,7 @@ ou bien :
 ```
 
 Ce qui donne la grille suivante :  
-![clipboard.png](rgRuoyrc4-clipboard.png)
+![clipboard.png](imgs_CR/rgRuoyrc4-clipboard.png)
 ### Parsing du fichier en Python :
 
 ```python:parsing_fichier_liz.py
