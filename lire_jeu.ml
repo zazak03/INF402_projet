@@ -21,13 +21,13 @@ let print_jeu ((larg, haut, zone, l): jeu) =
     | - Implémentation :
 *)
     let p_iteri (index: int) (l: case list) =
-        let () = Printf.printf "    %d: [ " (index+1) in
-        let () = (List.iter (fun (x,y) -> Printf.printf "(%d,%d); " x y) l ) in
-        let () = Printf.printf "]\n" in
+        Printf.printf "    %d: [ " (index+1);
+        List.iter (fun (x,y) -> Printf.printf "(%d,%d); " x y) l;
+        Printf.printf "]\n";
         ()
     in
-    let () = Printf.printf "largeur: %d\nhauteur: %d\nnombre de zones: %d\ndictionnaire de zone:\n" larg haut zone  in
-    let () = List.iteri p_iteri l in
+    Printf.printf "largeur: %d\nhauteur: %d\nnombre de zones: %d\ndictionnaire de zone:\n" larg haut zone;
+    List.iteri p_iteri l;
     ()
 ;;
 
