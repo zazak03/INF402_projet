@@ -94,40 +94,38 @@ $$
 la règle est donc:
 
 $$
-  (i,j) \Rightarrow (1) \land (2)
-  \\ \text{}
-  \\ \equiv (i,j) \Rightarrow
-  \\ ((i+1,j) \lor (i-1,j) \lor (i,j+1) \lor (i,j-1)) \\  
-  \\ \land (\neg (i+1,j)\lor \neg(i-1,j)) 
-  \\ \land (\neg(i+1,j)\lor \neg(i,j+1)) 
-  \\ \land (\neg(i+1,j)\lor \neg(i,j-1)) 
-  \\ \land (\neg(i-1,j)\lor \neg(i,j+1)) 
-  \\ \land (\neg(i-1,j)\lor \neg(i,j-1)) 
-  \\ \land (\neg(i,j+1)\lor \neg(i,j-1))
+(i,j) \Rightarrow (1) \land (2)
+\\ \text{}
+\\ \equiv (i,j) \Rightarrow
+\\ ((i+1,j) \lor (i-1,j) \lor (i,j+1) \lor (i,j-1)) \\  
+\\ \land (\neg (i+1,j)\lor \neg(i-1,j)) 
+\\ \land (\neg(i+1,j)\lor \neg(i,j+1)) 
+\\ \land (\neg(i+1,j)\lor \neg(i,j-1)) 
+\\ \land (\neg(i-1,j)\lor \neg(i,j+1)) 
+\\ \land (\neg(i-1,j)\lor \neg(i,j-1)) 
+\\ \land (\neg(i,j+1)\lor \neg(i,j-1))
 $$
 on applique $A \Rightarrow B \equiv \neg A \lor B$
 
 $$
-  \\ \equiv \neg (i,j) \lor \big[
-  \\ ((i+1,j) \lor (i-1,j) \lor (i,j+1) \lor (i,j-1)) \\  
-  \\ \land (\neg (i+1,j)\lor \neg(i-1,j)) 
-  \\ \land (\neg(i+1,j)\lor \neg(i,j+1)) 
-  \\ \land (\neg(i+1,j)\lor \neg(i,j-1)) 
-  \\ \land (\neg(i-1,j)\lor \neg(i,j+1)) 
-  \\ \land (\neg(i-1,j)\lor \neg(i,j-1)) 
-  \\ \land (\neg(i,j+1)\lor \neg(i,j-1))
-  \\ \big]
-  \\ \text{}
-  \\ \equiv
-  \\ \text{[} \neg(i,j) \lor (i+1,j) \lor (i-1,j) \lor (i,j+1) \lor (i,j-1)] \\  
-  \\ \land [\neg(i,j) \lor \neg (i+1,j)\lor \neg(i-1,j)] 
-  \\ \land [\neg(i,j) \lor \neg(i+1,j)\lor \neg(i,j+1)]
-  \\ \land [\neg(i,j) \lor \neg(i+1,j)\lor \neg(i,j-1)] 
-  \\ \land [\neg(i,j) \lor \neg(i-1,j)\lor \neg(i,j+1)] 
-  \\ \land [\neg(i,j) \lor \neg(i-1,j)\lor \neg(i,j-1)] 
-  \\ \land [\neg(i,j) \lor \neg(i,j+1)\lor \neg(i,j-1)]
-  \\
-
+\\ \equiv \neg (i,j) \lor \big[
+\\ ((i+1,j) \lor (i-1,j) \lor (i,j+1) \lor (i,j-1)) \\  
+\\ \land (\neg (i+1,j)\lor \neg(i-1,j)) 
+\\ \land (\neg(i+1,j)\lor \neg(i,j+1)) 
+\\ \land (\neg(i+1,j)\lor \neg(i,j-1)) 
+\\ \land (\neg(i-1,j)\lor \neg(i,j+1)) 
+\\ \land (\neg(i-1,j)\lor \neg(i,j-1)) 
+\\ \land (\neg(i,j+1)\lor \neg(i,j-1))
+\\ \big]
+\\ \text{}
+\\ \equiv
+\\ \text{[} \neg(i,j) \lor (i+1,j) \lor (i-1,j) \lor (i,j+1) \lor (i,j-1)] \\  
+\\ \land [\neg(i,j) \lor \neg (i+1,j)\lor \neg(i-1,j)] 
+\\ \land [\neg(i,j) \lor \neg(i+1,j)\lor \neg(i,j+1)]
+\\ \land [\neg(i,j) \lor \neg(i+1,j)\lor \neg(i,j-1)] 
+\\ \land [\neg(i,j) \lor \neg(i-1,j)\lor \neg(i,j+1)] 
+\\ \land [\neg(i,j) \lor \neg(i-1,j)\lor \neg(i,j-1)] 
+\\ \land [\neg(i,j) \lor \neg(i,j+1)\lor \neg(i,j-1)]
 $$
 
 Il faut donc appliquer cela pour chaque case.  
@@ -171,7 +169,7 @@ $$
 
 $$
 \neg (A \land B \land C) \land \neg (A \land B \land D) \land \neg (A \land B \land E) \\
-\land \neg (A \land C \land D) \land \neg (A \land C \land E) \land \neg (A \land D \land E) \\ \land \neg (B \land C \land D) \land \neg (B \land C \land E) \land \neg (B \land D \land E) \\ \land \neg (C \land D \land E)\\
+\land \neg (A \land C \land D) \land \neg (A \land C \land E) \land \neg (A \land D \land E) \\ \land \neg (B \land C \land D) \land \neg (B \land C \land E) \land \neg (B \land D \land E) \\ \land \neg (C)\land D \land E)\\
 \text{} \\ 
 \equiv \\
 (\neg A \lor \neg B \lor \neg C) \land (\neg A \lor \neg B \lor \neg D) \land (\neg A \lor \neg B \lor \neg E) \\
@@ -195,45 +193,43 @@ Supposons qu'il existe $C_a$ et $C_b$ vrai.
 on a :
 
 $$
-\overset{n}{\underset{i=1}{\Large \land}}\big( \space \overset{n}{\underset{\underset{\scriptsize j \neq i}{j=1}}{\Large \lor}}(C_j) \space \big)
-
-\equiv \big( \space \overset{n}{\underset{\underset{\scriptsize j \neq a}{j = 1}}{\Large \lor}}(C_j) \big)
-
-\land \overset{n}{\underset{\underset{\scriptsize i \neq a}{i=1}}{\Large \land}}\big( \space \overset{n}{\underset{\underset{\scriptsize j\neq i}{j=1}}{\Large \lor}}(C_j) \space \big)
+\\ \overset{n}{\underset{i=1}{\Large \land}}\big( \space \overset{n}{\underset{\underset{\scriptsize j \neq i}{j=1}}{\Large \lor}}(C_j) \space \big)
 \\
-\equiv \big(\big(\overset{n}{\underset{\underset{\scriptsize j\neq a,b}{j=1}}{\Large \lor}}C_j \space \big) \lor \underset{\color{LimeGreen} \text{vrai}}{C_b} \big)
-\land \overset{n}{\underset{\underset{\scriptsize i \neq a}{i=1}}{\Large \land}}\big( \space \overset{n}{\underset{\underset{\scriptsize j\neq i,a}{j=1}}{\Large \lor}}(C_j) \lor \underset{\color{LimeGreen} \text{vrai}}{C_a}\space \big) \equiv \top
-
+\\ \equiv \big( \space \overset{n}{\underset{\underset{\scriptsize j \neq a}{j = 1}}{\Large \lor}}(C_j) \big)
+\\
+\\ \land \overset{n}{\underset{\underset{\scriptsize i \neq a}{i=1}}{\Large \land}}\big( \space \overset{n}{\underset{\underset{\scriptsize j\neq i}{j=1}}{\Large \lor}}(C_j) \space \big)
+\\
+\\ \equiv \big(\big(\overset{n}{\underset{\underset{\scriptsize j\neq a,b}{j=1}}{\Large \lor}}C_j \space \big) \lor \underset{\color{LimeGreen} \text{vrai}}{C_b} \big)
+\\ \land \overset{n}{\underset{\underset{\scriptsize i \neq a}{i=1}}{\Large \land}}\big( \space \overset{n}{\underset{\underset{\scriptsize j\neq i,a}{j=1}}{\Large \lor}}(C_j) \lor \underset{\color{LimeGreen} \text{vrai}}{C_a}\space \big) \equiv \top
 $$
 
 
 **au plus 2**
 
 $$
-\overset{n}{\underset {\underset {\underset {\underset{\scriptsize j \neq k}{\scriptsize i \neq k}}{\scriptsize i \neq j}}{i,j,k=1}}{\Large \land}} 
-\neg \big( C_i \land C_j \land C_k \big)\\
-\equiv \\
-\overset{n}{\underset {\underset {\underset {\underset{\scriptsize j \neq k}{\scriptsize i \neq k}}{\scriptsize i \neq j}}{i,j,k=1}}{\Large \land}} 
-\big( \neg C_i \lor \neg C_j \lor \neg C_k \big)\\
+\\ \overset{n}{\underset {\underset {\underset {\underset{\scriptsize j \neq k}{\scriptsize i \neq k}}{\scriptsize i \neq j}}{i,j,k=1}}{\Large \land}} 
+\\ \neg \big( C_i \land C_j \land C_k \big)\\
+\\ \equiv \\
+\\ \overset{n}{\underset {\underset {\underset {\underset{\scriptsize j \neq k}{\scriptsize i \neq k}}{\scriptsize i \neq j}}{i,j,k=1}}{\Large \land}} 
+\\ \big( \neg C_i \lor \neg C_j \lor \neg C_k \big)\\
 $$
 
 
 ### Modelisation sous forme normale conjonctive.
 
 $$
-
-  \\ \text{[} \neg(i,j) \lor (i+1,j) \lor (i-1,j) \lor (i,j+1) \lor (i,j-1)] \\  
-  \\ \land [\neg(i,j) \lor \neg (i+1,j)\lor \neg(i-1,j)] 
-  \\ \land [\neg(i,j) \lor \neg(i+1,j)\lor \neg(i,j+1)]
-  \\ \land [\neg(i,j) \lor \neg(i+1,j)\lor \neg(i,j-1)] 
-  \\ \land [\neg(i,j) \lor \neg(i-1,j)\lor \neg(i,j+1)] 
-  \\ \land [\neg(i,j) \lor \neg(i-1,j)\lor \neg(i,j-1)] 
-  \\ \land [\neg(i,j) \lor \neg(i,j+1)\lor \neg(i,j-1)] 
-  \\ \land 
-  \\ \overset{n}{\underset{i=1}{\Large \land}}\big( \space \overset{n}{\underset{\underset{\scriptsize j\neq i}{j=1}}{\Large \lor}}(C_j) \space \big)
-  \\ \land
-  \\ \overset{n}{\underset {\underset {\underset {\underset{\scriptsize j \neq k}{\scriptsize i \neq k}}{\scriptsize i \neq j}}{i,j,k=1}}{\Large \land}} 
-\big( \neg C_i \lor \neg C_j \lor \neg C_k \big)\\
+\\ \text{[} \neg(i,j) \lor (i+1,j) \lor (i-1,j) \lor (i,j+1) \lor (i,j-1)] \\  
+\\ \land [\neg(i,j) \lor \neg (i+1,j)\lor \neg(i-1,j)] 
+\\ \land [\neg(i,j) \lor \neg(i+1,j)\lor \neg(i,j+1)]
+\\ \land [\neg(i,j) \lor \neg(i+1,j)\lor \neg(i,j-1)] 
+\\ \land [\neg(i,j) \lor \neg(i-1,j)\lor \neg(i,j+1)] 
+\\ \land [\neg(i,j) \lor \neg(i-1,j)\lor \neg(i,j-1)] 
+\\ \land [\neg(i,j) \lor \neg(i,j+1)\lor \neg(i,j-1)] 
+\\ \land 
+\\ \overset{n}{\underset{i=1}{\Large \land}}\big( \space \overset{n}{\underset{\underset{\scriptsize j\neq i}{j=1}}{\Large \lor}}(C_j) \space \big)
+\\ \land
+\\ \overset{n}{\underset {\underset {\underset {\underset{\scriptsize j \neq k}{\scriptsize i \neq k}}{\scriptsize i \neq j}}{i,j,k=1}}{\Large \land}} 
+\\ \big( \neg C_i \lor \neg C_j \lor \neg C_k \big)\\
 $$
 
 ## Les programmes.
