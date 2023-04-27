@@ -141,3 +141,12 @@ let rec dimacs_zone (jeu:jeu) : unit =
             dimacs_zone_au_moins_2 jeu;
 *)
 
+
+let nombre_de_clauses (j:jeu):unit =
+            let (l,h,nb_z,lz) = j in
+            let regle_cases:int = (7*l*h - 3*(2*l + 2*h) + 4) in
+            let regle_au_plus_2:int = l*h in
+            let regle_au_moins_2:int = List.fold_left (fun x z -> (k_parmi_n 3 (List.length z)) + x) 0 lz in
+            Printf.printf "p cnf %d %d\n" (l*h) (regle_cases + regle_au_moins_2 + regle_au_plus_2) 
+
+

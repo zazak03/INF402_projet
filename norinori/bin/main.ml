@@ -13,6 +13,8 @@ let () =
     (*print_jeu mon_jeu;*) (*affichage de jeu*)
     let (l,h,_,_) = mon_jeu in 
     
+    Printf.printf "en-tete:\n";
+    nombre_de_clauses mon_jeu;   
     Printf.printf "cases:\n";
     dimacs_colonnes 1 l h; 
     Printf.printf "au plus 2:\n";
