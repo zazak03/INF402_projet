@@ -1,1 +1,1 @@
-bin/ecrire_jeu.ml: Int List Printf String Type_jeu
+bin/ecrire_jeu.ml: Int List Maths Printf String Type_jeu

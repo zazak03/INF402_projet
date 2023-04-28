@@ -2,23 +2,39 @@
 (*open Type_jeu*)
 open Lire_jeu
 open Ecrire_jeu
+open Visuel_resultat
+
+
+
 
 let () =
-    let file:string = ( if (Array.length Sys.argv = 2)
-      then Sys.argv.(1) (*le fichier est donné en argument*)
-      else "test.liz") in (*nom de fichier pas defaut*)
+    if (Array.length Sys.argv != 2)
+        then Printf.printf "\nusage: %s <nom>\n" Sys.argv.(0)
+    else
+
+    let nom:string = Sys.argv.(1) in (*le fichier est donné en argument*)
+    let file_entree:string = (String.cat "INSTANCES/" (String.cat nom ".liz")) in
+    let file_dimacs:string = (String.cat "DIMACS/" (String.cat nom ".dimacs")) in
+    let file_sortie:string = (String.cat "RESULTATS/" (String.cat nom ".res")) in
+    let file_visuel:string = (String.cat "RESULTATS/" (String.cat nom ".visu")) in
+
     (*Printf.printf "mon nom: %s\n" file;*)
-    let mon_jeu = lire_fichier file in (* on parse le fichier *)
+    let mon_jeu = lire_fichier file_entree in (* on parse le fichier *)
 
     (*print_jeu mon_jeu;*) (*affichage de jeu*)
-    let (l,h,_,_) = mon_jeu in 
-    
-    Printf.printf "cases:\n";
-    dimacs_colonnes 1 l h; 
-    Printf.printf "au plus 2:\n";
-    dimacs_zone_au_plus_2 mon_jeu;
-    Printf.printf "au moins 2:\n";
-    dimacs_zone_au_moins_2 mon_jeu;
+    sortie_dimacs file_dimacs mon_jeu;
+
+    (* On va lancer minisat sur notre instance *)
+    let commande = (String.cat "minisat " (String.cat file_dimacs (String.cat " " file_sortie))) in
+    Printf.printf "\ncommande: %s\n" commande;
+    let _ = Sys.command commande in
+    faire_visuel mon_jeu file_sortie file_visuel;
+
+    (* On print le visuel *)
+
+    Printf.printf "Resultat Visuel : \n";
+    let list_lignes_fichier = (Array.to_list (Arg.read_arg file_visuel)) in
+    Printf.printf "%s\n" (String.concat "\n" list_lignes_fichier );
     ()
     [@@warning "-8"]
 
