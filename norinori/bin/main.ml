@@ -4,23 +4,17 @@ open Lire_jeu
 open Ecrire_jeu
 
 let () =
-    let file:string = ( if (Array.length Sys.argv = 2)
-      then Sys.argv.(1) (*le fichier est donné en argument*)
-      else "test.liz") in (*nom de fichier pas defaut*)
+    if (Array.length Sys.argv != 2)
+        then Printf.printf "\nusage: %s <nom>\n" Sys.argv.(0)
+    else
+    let nom:string = Sys.argv.(1) in (*le fichier est donné en argument*)
+    let file_entree:string = (String.cat "INSTANCES/" (String.cat nom ".liz")) in
+    let file_dimacs:string = (String.cat "DIMACS/" (String.cat nom ".dimacs")) in
     (*Printf.printf "mon nom: %s\n" file;*)
-    let mon_jeu = lire_fichier file in (* on parse le fichier *)
+    let mon_jeu = lire_fichier file_entree in (* on parse le fichier *)
 
     (*print_jeu mon_jeu;*) (*affichage de jeu*)
-    let (l,h,_,_) = mon_jeu in 
-    
-    Printf.printf "en-tete:\n";
-    nombre_de_clauses mon_jeu;   
-    Printf.printf "cases:\n";
-    dimacs_colonnes 1 l h; 
-    Printf.printf "au plus 2:\n";
-    dimacs_zone_au_plus_2 mon_jeu;
-    Printf.printf "au moins 2:\n";
-    dimacs_zone_au_moins_2 mon_jeu;
+    sortie_dimacs file_dimacs mon_jeu;
     ()
     [@@warning "-8"]
 
