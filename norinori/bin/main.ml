@@ -30,11 +30,6 @@ let () =
     let _ = Sys.command commande in
     faire_visuel mon_jeu file_sortie file_visuel;
 
-    (* On print le visuel *)
-
-    Printf.printf "Resultat Visuel : \n";
-    let list_lignes_fichier = (Array.to_list (Arg.read_arg file_visuel)) in
-    Printf.printf "%s\n" (String.concat "\n" list_lignes_fichier );
     ()
     [@@warning "-8"]
 
