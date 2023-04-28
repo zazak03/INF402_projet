@@ -36,7 +36,7 @@ Ainsi vous pourrez trouver :
 ### Presentation du jeu.
 Le jeu que nous avons choisi est NoriNori.   
 
-![clipboard.png](pyl05iF9z-clipboard.png)  
+![clipboard.png](imgs_CR/pyl05iF9z-clipboard.png)  
 Le jeu commence avec une grille de X cases dans laquelle est préalablement défini un certain nombre de zones distinctes.  
 
 #### Règles.
@@ -47,8 +47,8 @@ Le but du jeu est de completer la grille en suivant ces 3 règles:
 3) On ne peux pas coller cote a cote deux pairs (mais on peut diagonalement).
 ---
 #### Exemples.
-![clipboard.png](4-d16SvDy-clipboard.png)  
-![clipboard.png](1ISxRO6z--clipboard.png)
+![clipboard.png](imgs_CR/4-d16SvDy-clipboard.png)  
+![clipboard.png](imgs_CR/1ISxRO6z--clipboard.png)
 ---
 #### Contraintes & Remarques.
 
@@ -298,7 +298,7 @@ ou bien :
 ```
 
 Ce qui donne la grille suivante :  
-![clipboard.png](rgRuoyrc4-clipboard.png)
+![clipboard.png](imgs_CR/rgRuoyrc4-clipboard.png)
 ### Parsing du fichier en Python :
 
 ```python:parsing_fichier_liz.py
