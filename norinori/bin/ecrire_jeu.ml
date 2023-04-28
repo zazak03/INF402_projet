@@ -14,74 +14,87 @@ let rec dimacs_case_de_colonnes (file:out_channel) (x:int) (y:int) (l:largeur) (
         (* Cas spéciaux *)
         (* Cases dans les Coins *)
 
-        | 1,1 -> 
-                 Printf.fprintf file "-%d %d %d 0\n" (coord_to_case x y l) (coord_to_case (x+1) y l) (coord_to_case x (y+1) l);
-                 Printf.fprintf file "-%d -%d -%d 0\n" (coord_to_case x y l) (coord_to_case (x+1) y l) (coord_to_case x (y+1) l);
+        | 1,1 ->
+                if (x=l && y=h) then 
+                        Printf.fprintf file "-%d 0\n" (coord_to_case x y l);
+                        dimacs_case_de_colonnes file x (y+1) l h
+                else
+                (if (x=l) then 
+                        Printf.fprintf file "-%d -%d 0\n" (coord_to_case x y l) (coord_to_case x (y+1) l);
+                        dimacs_case_de_colonnes file x (y+1) l h
+                else
+                if (y=h) then 
+                        Printf.fprintf file "-%d -%d 0\n" (coord_to_case x y l) (coord_to_case (x+1) y l);
+                        dimacs_case_de_colonnes file x (y+1) l h
+                else
+                Printf.fprintf file "-%d -%d -%d 0\n" (coord_to_case x y l) (coord_to_case (x+1) y l) (coord_to_case x (y+1) l);
+                Printf.fprintf file "-%d %d %d 0\n" (coord_to_case x y l) (coord_to_case (x+1) y l) (coord_to_case x (y+1) l);
                 (* Ensuite on Récure *)
+                )
                 dimacs_case_de_colonnes file x (y+1) l h
 
         | 1,y when y = h -> 
-                 Printf.fprintf file "-%d %d %d 0\n" (coord_to_case x y l) (coord_to_case (x+1) y l) (coord_to_case x (y-1) l);
-                 Printf.fprintf file "-%d -%d -%d 0\n" (coord_to_case x y l) (coord_to_case (x+1) y l) (coord_to_case x (y-1) l);
+                Printf.fprintf file "-%d %d %d 0\n" (coord_to_case x y l) (coord_to_case (x+1) y l) (coord_to_case x (y-1) l);
+                Printf.fprintf file "-%d -%d -%d 0\n" (coord_to_case x y l) (coord_to_case (x+1) y l) (coord_to_case x (y-1) l);
                 (* Ensuite on Récure *)
                 dimacs_case_de_colonnes file x (y+1) l h
 
         | x,1 when x = l -> 
-                 Printf.fprintf file "-%d %d %d 0\n" (coord_to_case x y l) (coord_to_case (x-1) y l) (coord_to_case x (y+1) l);
-                 Printf.fprintf file "-%d -%d -%d 0\n" (coord_to_case x y l) (coord_to_case (x-1) y l) (coord_to_case x (y+1) l);
+                Printf.fprintf file "-%d %d %d 0\n" (coord_to_case x y l) (coord_to_case (x-1) y l) (coord_to_case x (y+1) l);
+                Printf.fprintf file "-%d -%d -%d 0\n" (coord_to_case x y l) (coord_to_case (x-1) y l) (coord_to_case x (y+1) l);
                 (* Ensuite on Récure *)
                 dimacs_case_de_colonnes file x (y+1) l h
 
         | x,y when x = l && y = h -> 
-                 Printf.fprintf file "-%d %d %d 0\n" (coord_to_case x y l) (coord_to_case (x-1) y l) (coord_to_case x (y-1) l);
-                 Printf.fprintf file "-%d -%d -%d 0\n" (coord_to_case x y l) (coord_to_case (x-1) y l) (coord_to_case x (y-1) l);
+                Printf.fprintf file "-%d %d %d 0\n" (coord_to_case x y l) (coord_to_case (x-1) y l) (coord_to_case x (y-1) l);
+                Printf.fprintf file "-%d -%d -%d 0\n" (coord_to_case x y l) (coord_to_case (x-1) y l) (coord_to_case x (y-1) l);
                 (* Ensuite on Récure *)
                 dimacs_case_de_colonnes file x (y+1) l h
 
         (* Cases sur les arretes / bords *)
 
         | _,1 ->    
-                    Printf.fprintf file "-%d %d %d %d 0\n" (coord_to_case x y l) (coord_to_case (x+1) y l) (coord_to_case (x-1) y l) (coord_to_case x (y+1) l);
-                    Printf.fprintf file "-%d -%d -%d 0\n" (coord_to_case x y l) (coord_to_case (x+1) y l) (coord_to_case (x-1) y l);
-                    Printf.fprintf file "-%d -%d -%d 0\n" (coord_to_case x y l) (coord_to_case (x+1) y l) (coord_to_case x (y+1) l);
-                    Printf.fprintf file "-%d -%d -%d 0\n" (coord_to_case x y l) (coord_to_case (x-1) y l) (coord_to_case x (y+1) l);
+                Printf.fprintf file "-%d %d %d %d 0\n" (coord_to_case x y l) (coord_to_case (x+1) y l) (coord_to_case (x-1) y l) (coord_to_case x (y+1) l);
+                Printf.fprintf file "-%d -%d -%d 0\n" (coord_to_case x y l) (coord_to_case (x+1) y l) (coord_to_case (x-1) y l);
+                Printf.fprintf file "-%d -%d -%d 0\n" (coord_to_case x y l) (coord_to_case (x+1) y l) (coord_to_case x (y+1) l);
+                Printf.fprintf file "-%d -%d -%d 0\n" (coord_to_case x y l) (coord_to_case (x-1) y l) (coord_to_case x (y+1) l);
                 (* Ensuite on Récure *)
                 dimacs_case_de_colonnes file x (y+1) l h
 
         | 1,_ ->    
-                    Printf.fprintf file "-%d %d %d %d 0\n" (coord_to_case x y l) (coord_to_case (x+1) y l) (coord_to_case x (y+1) l) (coord_to_case x (y-1) l);
-                    Printf.fprintf file "-%d -%d -%d 0\n" (coord_to_case x y l) (coord_to_case (x+1) y l) (coord_to_case x (y+1) l);
-                    Printf.fprintf file "-%d -%d -%d 0\n" (coord_to_case x y l) (coord_to_case (x+1) y l) (coord_to_case x (y-1) l);
-                    Printf.fprintf file "-%d -%d -%d 0\n" (coord_to_case x y l) (coord_to_case x (y+1) l) (coord_to_case x (y-1) l);
+                Printf.fprintf file "-%d %d %d %d 0\n" (coord_to_case x y l) (coord_to_case (x+1) y l) (coord_to_case x (y+1) l) (coord_to_case x (y-1) l);
+                Printf.fprintf file "-%d -%d -%d 0\n" (coord_to_case x y l) (coord_to_case (x+1) y l) (coord_to_case x (y+1) l);
+                Printf.fprintf file "-%d -%d -%d 0\n" (coord_to_case x y l) (coord_to_case (x+1) y l) (coord_to_case x (y-1) l);
+                Printf.fprintf file "-%d -%d -%d 0\n" (coord_to_case x y l) (coord_to_case x (y+1) l) (coord_to_case x (y-1) l);
                 (* Ensuite on Récure *)
                 dimacs_case_de_colonnes file x (y+1) l h
 
         | x,_ when x = l ->    
-                    Printf.fprintf file "-%d %d %d %d 0\n" (coord_to_case x y l) (coord_to_case (x-1) y l) (coord_to_case x (y+1) l) (coord_to_case x (y-1) l);
-                    Printf.fprintf file "-%d -%d -%d 0\n" (coord_to_case x y l) (coord_to_case (x-1) y l) (coord_to_case x (y+1) l);
-                    Printf.fprintf file "-%d -%d -%d 0\n" (coord_to_case x y l) (coord_to_case (x-1) y l) (coord_to_case x (y-1) l);
-                    Printf.fprintf file "-%d -%d -%d 0\n" (coord_to_case x y l) (coord_to_case x (y+1) l) (coord_to_case x (y-1) l);
+                Printf.fprintf file "-%d %d %d %d 0\n" (coord_to_case x y l) (coord_to_case (x-1) y l) (coord_to_case x (y+1) l) (coord_to_case x (y-1) l);
+                Printf.fprintf file "-%d -%d -%d 0\n" (coord_to_case x y l) (coord_to_case (x-1) y l) (coord_to_case x (y+1) l);
+                Printf.fprintf file "-%d -%d -%d 0\n" (coord_to_case x y l) (coord_to_case (x-1) y l) (coord_to_case x (y-1) l);
+                Printf.fprintf file "-%d -%d -%d 0\n" (coord_to_case x y l) (coord_to_case x (y+1) l) (coord_to_case x (y-1) l);
                 (* Ensuite on Récure *)
                 dimacs_case_de_colonnes file x (y+1) l h
 
         | _,y when y = h ->    
-                    Printf.fprintf file "-%d %d %d %d 0\n" (coord_to_case x y l) (coord_to_case (x+1) y l) (coord_to_case (x-1) y l) (coord_to_case x (y-1) l);
-                    Printf.fprintf file "-%d -%d -%d 0\n" (coord_to_case x y l) (coord_to_case (x+1) y l) (coord_to_case (x-1) y l);
-                    Printf.fprintf file "-%d -%d -%d 0\n" (coord_to_case x y l) (coord_to_case (x+1) y l) (coord_to_case x (y-1) l);
-                    Printf.fprintf file "-%d -%d -%d 0\n" (coord_to_case x y l) (coord_to_case (x-1) y l) (coord_to_case x (y-1) l);
+                Printf.fprintf file "-%d %d %d %d 0\n" (coord_to_case x y l) (coord_to_case (x+1) y l) (coord_to_case (x-1) y l) (coord_to_case x (y-1) l);
+                Printf.fprintf file "-%d -%d -%d 0\n" (coord_to_case x y l) (coord_to_case (x+1) y l) (coord_to_case (x-1) y l);
+                Printf.fprintf file "-%d -%d -%d 0\n" (coord_to_case x y l) (coord_to_case (x+1) y l) (coord_to_case x (y-1) l);
+                Printf.fprintf file "-%d -%d -%d 0\n" (coord_to_case x y l) (coord_to_case (x-1) y l) (coord_to_case x (y-1) l);
                 (* Ensuite on Récure *)
                 dimacs_case_de_colonnes file x (y+1) l h
 
         (* Cas généraux *)
 
         | _,_ ->      
-                    Printf.fprintf file "-%d %d %d %d %d 0\n" (coord_to_case x y l) (coord_to_case (x+1) y l) (coord_to_case (x-1) y l) (coord_to_case x (y+1) l) (coord_to_case x (y-1) l);
-                    Printf.fprintf file "-%d -%d -%d 0\n" (coord_to_case x y l) (coord_to_case (x+1) y l) (coord_to_case (x-1) y l);
-                    Printf.fprintf file "-%d -%d -%d 0\n" (coord_to_case x y l) (coord_to_case (x+1) y l) (coord_to_case x (y+1) l);
-                    Printf.fprintf file "-%d -%d -%d 0\n" (coord_to_case x y l) (coord_to_case (x+1) y l) (coord_to_case x (y-1) l);
-                    Printf.fprintf file "-%d -%d -%d 0\n" (coord_to_case x y l) (coord_to_case (x-1) y l) (coord_to_case x (y+1) l);
-                    Printf.fprintf file "-%d -%d -%d 0\n" (coord_to_case x y l) (coord_to_case (x-1) y l) (coord_to_case x (y-1) l);
-                    Printf.fprintf file "-%d -%d -%d 0\n" (coord_to_case x y l) (coord_to_case x (y+1) l) (coord_to_case x (y-1) l);
+                Printf.fprintf file "-%d %d %d %d %d 0\n" (coord_to_case x y l) (coord_to_case (x+1) y l) (coord_to_case (x-1) y l) (coord_to_case x (y+1) l) (coord_to_case x (y-1) l);
+                Printf.fprintf file "-%d -%d -%d 0\n" (coord_to_case x y l) (coord_to_case (x+1) y l) (coord_to_case (x-1) y l);
+                Printf.fprintf file "-%d -%d -%d 0\n" (coord_to_case x y l) (coord_to_case (x+1) y l) (coord_to_case x (y+1) l);
+                Printf.fprintf file "-%d -%d -%d 0\n" (coord_to_case x y l) (coord_to_case (x+1) y l) (coord_to_case x (y-1) l);
+                Printf.fprintf file "-%d -%d -%d 0\n" (coord_to_case x y l) (coord_to_case (x-1) y l) (coord_to_case x (y+1) l);
+                Printf.fprintf file "-%d -%d -%d 0\n" (coord_to_case x y l) (coord_to_case (x-1) y l) (coord_to_case x (y-1) l);
+                Printf.fprintf file "-%d -%d -%d 0\n" (coord_to_case x y l) (coord_to_case x (y+1) l) (coord_to_case x (y-1) l);
                 
                 (* Ensuite on Récure *)
                 dimacs_case_de_colonnes file x (y+1) l h
