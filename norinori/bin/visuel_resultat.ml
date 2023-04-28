@@ -40,9 +40,21 @@ let faire_visuel (j:jeu) (nom_entree:string) (nom_sortie:string) : unit =
     *)
     let (l,_,_,_) = j in 
     let lines_array = (Arg.read_arg nom_entree) in (*on recupere les lignes*)
-    let solution = lines_array.(1) in (*on concatene toutes les lignes*)
-    let file:out_channel = open_out nom_sortie in
-    let _ = (String.fold_left automate (file, l, Espace, 0) solution) in
-    Printf.fprintf file "\n";
-    close_out file;
-    ()
+    let satisf = lines_array.(0) in
+    if (satisf = "SAT") then (
+        Printf.printf("L'instance est satisfaisable !\n");
+        let solution = lines_array.(1) in (*on concatene toutes les lignes*)
+        let file:out_channel = open_out nom_sortie in
+        let _ = (String.fold_left automate (file, l, Espace, 0) solution) in
+        Printf.fprintf file "\n";
+        close_out file;
+        (* On print le visuel *)
+        Printf.printf "Resultat Visuel : \n";
+        let list_lignes_fichier = (Array.to_list (Arg.read_arg nom_sortie)) in
+        Printf.printf "%s\n" (String.concat "\n" list_lignes_fichier );
+        ()
+    )
+    else (
+        Printf.printf("L'instance est insatisfaisable !\n");
+        ()
+    )
