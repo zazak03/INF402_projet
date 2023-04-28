@@ -155,7 +155,9 @@ let sortie_dimacs (nom_sortie:string) (j:jeu) : unit =
             
             dimacs_zone_au_plus_2 file j;
             dimacs_zone_au_moins_2 file j;
+            close_out file;
             ()
+
 
 
 

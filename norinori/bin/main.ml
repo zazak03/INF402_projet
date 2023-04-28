@@ -4,6 +4,9 @@ open Lire_jeu
 open Ecrire_jeu
 open Visuel_resultat
 
+
+
+
 let () =
     if (Array.length Sys.argv != 2)
         then Printf.printf "\nusage: %s <nom>\n" Sys.argv.(0)
@@ -21,8 +24,17 @@ let () =
     (*print_jeu mon_jeu;*) (*affichage de jeu*)
     sortie_dimacs file_dimacs mon_jeu;
 
+    (* On va lancer minisat sur notre instance *)
+    let commande = (String.cat "minisat " (String.cat file_dimacs (String.cat " " file_sortie))) in
+    Printf.printf "\ncommande: %s\n" commande;
+    let _ = Sys.command commande in
     faire_visuel mon_jeu file_sortie file_visuel;
 
+    (* On print le visuel *)
+
+    Printf.printf "Resultat Visuel : \n";
+    let list_lignes_fichier = (Array.to_list (Arg.read_arg file_visuel)) in
+    Printf.printf "%s\n" (String.concat "\n" list_lignes_fichier );
     ()
     [@@warning "-8"]
 

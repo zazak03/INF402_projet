@@ -42,7 +42,6 @@ let faire_visuel (j:jeu) (nom_entree:string) (nom_sortie:string) : unit =
     let lines_array = (Arg.read_arg nom_entree) in (*on recupere les lignes*)
     let solution = lines_array.(1) in (*on concatene toutes les lignes*)
     let file:out_channel = open_out nom_sortie in
-    Printf.fprintf file "\n";
     let _ = (String.fold_left automate (file, l, Espace, 0) solution) in
     Printf.fprintf file "\n";
     close_out file;
