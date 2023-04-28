@@ -1,3 +1,4 @@
-.dimacs
-.res
-.visu
+**.dimacs
+**.res
+**.visu
+norinori/_build/**
