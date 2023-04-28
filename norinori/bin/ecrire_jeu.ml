@@ -15,22 +15,9 @@ let rec dimacs_case_de_colonnes (file:out_channel) (x:int) (y:int) (l:largeur) (
         (* Cases dans les Coins *)
 
         | 1,1 ->
-                if (x=l && y=h) then 
-                        Printf.fprintf file "-%d 0\n" (coord_to_case x y l);
-                        dimacs_case_de_colonnes file x (y+1) l h
-                else
-                (if (x=l) then 
-                        Printf.fprintf file "-%d -%d 0\n" (coord_to_case x y l) (coord_to_case x (y+1) l);
-                        dimacs_case_de_colonnes file x (y+1) l h
-                else
-                if (y=h) then 
-                        Printf.fprintf file "-%d -%d 0\n" (coord_to_case x y l) (coord_to_case (x+1) y l);
-                        dimacs_case_de_colonnes file x (y+1) l h
-                else
                 Printf.fprintf file "-%d -%d -%d 0\n" (coord_to_case x y l) (coord_to_case (x+1) y l) (coord_to_case x (y+1) l);
                 Printf.fprintf file "-%d %d %d 0\n" (coord_to_case x y l) (coord_to_case (x+1) y l) (coord_to_case x (y+1) l);
                 (* Ensuite on Récure *)
-                )
                 dimacs_case_de_colonnes file x (y+1) l h
 
         | 1,y when y = h -> 
@@ -149,7 +136,7 @@ let en_tete (file:out_channel) (j:jeu):unit =
             let (l,h,_,lz) = j in
             let regle_cases:int = (7*l*h - 3*(2*l + 2*h) + 4) in
             let regle_au_plus_2:int = l*h in
-            let regle_au_moins_2:int = List.fold_left (fun x z -> (Maths.k_parmis_n 3 (List.length z)) + x) 0 lz in
+            let regle_au_moins_2:int = List.fold_left (fun x z -> (Maths.trois_parmis_n (List.length z)) + x) 0 lz in
             Printf.fprintf file "p cnf %d %d\n" (l*h) (regle_cases + regle_au_moins_2 + regle_au_plus_2);
             ()
 
