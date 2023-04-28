@@ -40,7 +40,7 @@ Le jeu que nous avons choisi est NoriNori.
 Le jeu commence avec une grille de X cases dans laquelle est préalablement défini un certain nombre de zones distinctes.  
 
 #### Règles.
-Le but du jeu est de completer la grille en suivant ces 3 règles:
+Le but du jeu est de compléter la grille en suivant ces 3 règles:
 
 1) Chaque zone doit avoir un total de 2 cases coloriées.
 2) Les cases coloriées sont toujours par pair de 2 indépendament des limites des zones.
@@ -54,16 +54,16 @@ Le but du jeu est de completer la grille en suivant ces 3 règles:
 
 Il y a une unique solution si la grille est générée correctement.
 
-Nous avons remarquée plusieurs cas qui permette d'avancer dans la resolution de la grille :
+Nous avons remarquée plusieurs cas qui permette d'avancer dans la résolution de la grille :
 
 - Les zones constituées d'exactement deux cases sont toujours a coloriées elles feront toujours partie de la solution finale.  
 - Toutes les cases cote à cote aux cases coloriées deviennent donc inutilisable car ne respectent plus la règle N°3  
 - Toutes les cases seules et entourées par des cases inutilisable deviennent aussi inutilisable.  
-- Les zones dans lequels il ne reste plus que deux cases peuvent etre coloriées.   
-- Ensuite on peut completer les cases coloriées qui ne sont pas par pair et qui n'ont plus que une seule solution.  
+- Les zones dans lequel il ne reste plus que deux cases peuvent être coloriées.   
+- Ensuite on peut compléter les cases coloriées qui ne sont pas par pair et qui n'ont plus que une seule solution.  
 
-Et apres on peut réutiliser les étapes précédentes jusqu'a ce que notre grille soit complétée.  
-(Attention ces étapes ne sont pas exhaustive, il existe tres probablement des grilles dans lequels appliquer ces étapes ne suffisent pas.)
+Et après on peut réutiliser les étapes précédentes jusqu'à ce que notre grille soit complétée.  
+(Attention ces étapes ne sont pas exhaustive, il existe très probablement des grilles dans lequel appliquer ces étapes ne suffisent pas.)
 
 ---
 
@@ -89,7 +89,7 @@ Si une case est coloriée, alors elle a une et une seule case coloriée à coté
 On va simplifier "alors elle a une et une seule case coloriée à coté d'elle" en deux règles.  
 
 1) Elle a au moins une case coloriée a coté d'elle (qui se traduit simplement avec une disjonction)
-3) Elle a au plus une case coloriée a coté d'elle (qui se traduit en logique comme: "elle n'a acune paire de case adjacente coloriée")
+3) Elle a au plus une case coloriée a coté d'elle (qui se traduit en logique comme: "elle n'a aucune paire de case adjacente coloriée")
 
 $$
 \text{(1)} \\ \text{} \\ (i+1,j) \lor (i-1,j) \lor (i,j+1) \lor (i,j-1) \\ 
@@ -153,7 +153,7 @@ $$
 $$
 
 Il faut donc appliquer cela pour chaque case.  
-N'oublions pas le cas spécial des case au bors de la grille. Deux aproches possibles:  
+N'oublions pas le cas spécial des cases au bord de la grille. Deux approches possibles:  
 
 1) Modifier la règle des cases du bord pour que la case colorié adjacente soit sur le terrain.  
 2) Garder la même règle pour les cases au bord et rajouter une ligne de cases autour du terrain.
@@ -170,7 +170,7 @@ Nous avons choisis de partir sur la première options, en ajoutant quelques cas 
 Soit z une zone de 5 éléments {A,B,C,D,E}.  
 
 On sait qu'il doit y avoir exactement 2 cases coloriées dans la zone :  
-Une stratégie pour modeliser cette règle est de `divide et impera` :  
+Une stratégie pour modéliser cette règle est de `divide et impera` :  
 
 **On sépare la règle "exactement 2" en :** Au moins 2 $ \land $ Au plus 2.  
 (On fait ça, car on a essayé de directement faire une règle "exactement 2" mais elle était beaucoup trop longue)
@@ -263,7 +263,7 @@ $$
 ## Les programmes.
 ### Formalisation d'un problème dans un fichier.
 
-Nous avons choisis la structure de fichier suivant pour modeliser nos grilles :
+Nous avons choisis la structure de fichier suivant pour modéliser nos grilles :
 
 ```:fichier.liz
 hauteur(nombre entier positif);
@@ -366,7 +366,7 @@ if __name__ == "__main__":
   
 ```
 
-On peut l'executer en faisant : `python parsing_fichier_liz.py ma_grille.liz`
+On peut l'éxecuter en faisant : `python parsing_fichier_liz.py ma_grille.liz`
 
 ### Parsing en Ocaml :
 
@@ -474,28 +474,28 @@ print_jeu mon_jeu;; (*affichage de jeu*)
 
 Pour la suite du projet, nous avons choisis de continuer en Ocaml.
 
-### Formalisation d'une entree en logique propositionnelle.
+### Formalisation d'une entrée en logique propositionnelle.
 
-Maintenant que nous avons une matrice en Python ou bien un dictionnaire en Ocaml representant notre instance, nous devons la transformée en forme de logique propositionnelle.
+Maintenant que nous avons une matrice en Python ou bien un dictionnaire en Ocaml représentant notre instance, nous devons la transformée en forme de logique propositionnelle.
 
 #### Règle 1) 
-Nous avons réalisé une fonction recursive "dimacs_case_de_colonnes" qui s'occupe de parcourir une colonnes et d'appliquer la règle 1 sur chaque case de la colonne.  
+Nous avons réalisé une fonction récursive "dimacs_case_de_colonnes" qui s'occupe de parcourir une colonnes et d'appliquer la règle 1 sur chaque case de la colonne.  
 Elle est appelée par "dimacs_colonnes"
 
 #### Règle 2) & 3)
-Pour la règle 2 on appelle 
+Pour la règle 2 on appelle la fonction `au_plus_2` et la fonction qui utilise l'itérateur.
 
 ### Conversion d'une instance au format DIMACS.
 Pour convertir dans le fichier DIMACS, on fait simplement des Printf.fprintf dans le fichier .dimacs en même temps que notre formalisation.
 
 ### Afficheur de solution.
-Notre afficheur de solution prend le fichier .res donnée par minisat et va afficher un tableau dans lequel il va mettre des `.` pour des cases vide et des `#` pour des cases coloriées.
+Notre afficheur de solution se trouve dans le fichier `visuel_resultat.ml` il prend un fichier .res donnée par minisat et va afficher un tableau dans lequel il va mettre des `.` pour des cases vide et des `#` pour des cases coloriées.
 
 ### Programme principale qui utilise les autre progs.
-Notre programme principale est main.ml il commence par recuperer les arguments puis crée les futures noms des fichiers .res, .dimacs et .visu ensuite il fait la formalisation et la transformation en DIMACS par la même ocassion, apres ça, il lance minisat avec le fichier .dimacs et enfin il utilise la solution de minisat pour créer le fichier .visu.
+Notre programme principale est main.ml il commence par récupérer les arguments puis crée les futures noms des fichiers .res, .dimacs et .visu ensuite il fait la formalisation et la transformation en DIMACS par la même occasion, après ça, il lance minisat avec le fichier .dimacs et enfin il utilise la solution de minisat pour créer le fichier .visu.
 
-## Les instances tests
-### instance basique probleme simplifiée
+## Les instances tests.
+### instance basique problème simplifiée.
 ```liz:grille_simple.liz
 6;6;8;
 1;1;2;2;2;3;
@@ -508,7 +508,7 @@ Notre programme principale est main.ml il commence par recuperer les arguments p
 ```
 Représente une grille basique de 6 par 6 avec 8 zones.
 
-### instance normal avec tout les cas de figure
+### instance normal avec tout les cas de figure.
 ```liz:semi_grosse_grille.liz
 10;10;20;
 1;1;1;2;3;3;3;4;5;5;
@@ -524,7 +524,7 @@ Représente une grille basique de 6 par 6 avec 8 zones.
 ```
 Représente une grille plus complexe avec tous les cas de figures que nous avons observé.
 
-### instances problématique avec cas de figure critiques
+### instances problématique avec cas de figure critiques.
 ```liz:grille_1_case.liz
 1;1;1;1
 ```
@@ -535,23 +535,21 @@ Représente une grille de une seule case, qui est censé ne pas avoir de solutio
 ```
 Une grille avec deux cases, soit une seule solution unique. 
 
-### instance avec un nombre de clause énorme
+### instance avec un nombre de clause énorme.
 ```liz:grille_immense_mais_simple.liz
-50;50;1;
+25;25;1;
 1;1;1;1;..........;1;
 .                  .
 .                  .
 .                  .
 1;1;1;1;..........;1;
 ```
-On essaye avec une très grosse grille pour voir si notre systeme est capable de résoudre malgrès une nombre de clause énorme.
-
--> **Pour l'instant il y a un problème avec ce cas de figure, une division par 0 que nous ne comprenons pas**
+On essaye avec une très grosse grille pour voir si notre système est capable de résoudre malgré un nombre de clause énorme (40 millions).
 
 ## Soutenance.
 A faire ...
 ### Présentation du jeu.
 ### Explication transformation des règles en logique.
 ### Explication des algorithmes.
-### Demonstration des algorithmes.
+### Démonstration des algorithmes.
 ### Conclusion.
