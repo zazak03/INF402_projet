@@ -4,17 +4,39 @@ __Pascal Isak & Givre Zolan & Weber Loïc__
 
 ## Table of Content
 
+---
 ## Information et dates.
+
 Dates :  
 1) pré-rapport décrivant la partie modélisation : 10 mars 2023
 2) Rapport final + code source 28 avril 2023
 
+## Installation
+
+Premièrement, il faut installer **opam, dune, ocaml et minisat**.  
+[https://opam.ocaml.org/doc/Install.html](https://opam.ocaml.org/doc/Install.html)  
+[https://dune.build/install](https://dune.build/install)  
+
+Deuxièmement, placez vous dans le dossier *norinori/bin/* et assurez-vous que les sous-dossiers *INSTANCES/*, *DIMACS/* et *RESULTATS/* existent.
+
+Troisièmement, exécutez `'dune exec norinori test'`  
+vous pourrez remplacer "test" par le nom d'un fichier qui se trouve dans le dossier *INSTANCES/*
+
+Ainsi vous pourrez trouver : 
+
+- Dans INSTANCES : Les grilles dans le format .liz (format que nous avons créé).  
+- Dans DIMACS : Les fichiers en .dimacs : la traduction des fichiers .liz dans le format DIMACS.  
+- Dans RESULTATS : 
+    - Les fichiers .res : la solution trouvée par minisat. 
+    - Les fichiers .visu : la grille avec la solution.  
+
+---
 ## Rapport.
 
 ### Presentation du jeu.
 Le jeu que nous avons choisi est NoriNori.   
 
-![clipboard.png](imgs_CR/pyl05iF9z-clipboard.png)  
+![clipboard.png](pyl05iF9z-clipboard.png)  
 Le jeu commence avec une grille de X cases dans laquelle est préalablement défini un certain nombre de zones distinctes.  
 
 #### Règles.
@@ -23,67 +45,63 @@ Le but du jeu est de completer la grille en suivant ces 3 règles:
 1) Chaque zone doit avoir un total de 2 cases coloriées.
 2) Les cases coloriées sont toujours par pair de 2 indépendament des limites des zones.
 3) On ne peux pas coller cote a cote deux pairs (mais on peut diagonalement).
-
+---
 #### Exemples.
-![clipboard.png](imgs_CR/4-d16SvDy-clipboard.png)  
-![clipboard.png](imgs_CR/1ISxRO6z--clipboard.png)
+![clipboard.png](4-d16SvDy-clipboard.png)  
+![clipboard.png](1ISxRO6z--clipboard.png)
+---
 #### Contraintes & Remarques.
 
 Il y a une unique solution si la grille est générée correctement.
 
-Nous avons remarquée plusieurs cas qui permette d'avancer dans la grille :
+Nous avons remarquée plusieurs cas qui permette d'avancer dans la resolution de la grille :
 
 - Les zones constituées d'exactement deux cases sont toujours a coloriées elles feront toujours partie de la solution finale.  
-![clipboard.png](imgs_CR/BcFHlXpTo-clipboard.png)   
 - Toutes les cases cote à cote aux cases coloriées deviennent donc inutilisable car ne respectent plus la règle N°3  
-![clipboard.png](imgs_CR/7p8xVc9AC-clipboard.png)  
 - Toutes les cases seules et entourées par des cases inutilisable deviennent aussi inutilisable.  
-![clipboard.png](imgs_CR/GLAOad3RQ-clipboard.png)
 - Les zones dans lequels il ne reste plus que deux cases peuvent etre coloriées.   
- ![clipboard.png](imgs_CR/RDsKrSsfl-clipboard.png)  
 - Ensuite on peut completer les cases coloriées qui ne sont pas par pair et qui n'ont plus que une seule solution.  
-![clipboard.png](imgs_CR/643cUiGxS-clipboard.png)  
 
 Et apres on peut réutiliser les étapes précédentes jusqu'a ce que notre grille soit complétée.  
-![clipboard.png](imgs_CR/eB6q0Mok_-clipboard.png)  
 (Attention ces étapes ne sont pas exhaustive, il existe tres probablement des grilles dans lequels appliquer ces étapes ne suffisent pas.)
 
+---
 
 ### Traduction du problème en logique.
-Premièrement nous avons traduit simplement le fait de dire qu'une case est coloriée ou non.  
+Premièrement nous avons traduit simplement le fait de dire qu'une case est coloriée ou non avec $n$ étant la taille de la grille.
 
 $$ 
 (i,j) \text{ : la case de coordonées (i,j) est coloriée} \\ (i,j) \in [1,n]^2
 $$  
-n étant la taille de la grille.
 
 $$  
-\neg (i,j) \text{ : la case de coordonées (i,j) n'est pas coloriée}
+\neg (i,j) \text{ : la case de coordonées (i,j) n'est pas coloriée}  \\ (i,j) \in [1,n]^2
 $$  
-#### règles 2) et 3)
+
+#### Formalisation des Règles 2) et 3)
 Rappel :  
-
-2) Les cases coloriées sont toujours par paire de 2 indépendament des limites des zones.
-3) On ne peux pas coller côte a côte deux paires (mais on peut diagonalement).
+2) Les cases coloriées sont toujours par paire de 2 indépendament des limites des zones.  
+3) On ne peux pas coller côte a côte deux paires (mais on peut diagonalement).  
 
 Pour modéliser le problème, on commence par fusionner les règles 2) et 3).  
 Si une case est coloriée, alors elle a une et une seule case coloriée à coté d'elle.  
 
 On va simplifier "alors elle a une et une seule case coloriée à coté d'elle" en deux règles.  
 
-1) Elle a au moins une case coloriée a coté d'elle  
-  qui se traduit simplement avec une disjonction
-3) Elle a au plus une case coloriée a coté d'elle  
-  qui se traduit en logique comme: "elle n'a acune paire de case adjacente coloriée"
+1) Elle a au moins une case coloriée a coté d'elle (qui se traduit simplement avec une disjonction)
+3) Elle a au plus une case coloriée a coté d'elle (qui se traduit en logique comme: "elle n'a acune paire de case adjacente coloriée")
 
 $$
-\text{(1) :} \\ (i+1,j) \lor (i-1,j) \lor (i,j+1) \lor (i,j-1) \\ 
+\text{(1)} \\ \text{} \\ (i+1,j) \lor (i-1,j) \lor (i,j+1) \lor (i,j-1) \\ 
 $$
 
 $$
-\text{(2) :} \\ \phantom{..}\neg ((i+1,j)\land (i-1,j)) \\ \land \neg ((i+1,j)\land(i,j+1)) \\ \land \neg ((i+1,j)\land (i,j-1)) \\ \land \neg ((i-1,j)\land(i,j+1)) \\ \land \neg ((i-1,j)\land(i,j-1)) \\ \land \neg ((i,j+1)\land(i,j-1))
+\text{(2)} \\ \text{}
+\\ \phantom{..}\neg ((i+1,j)\land (i-1,j)) \\ \land \neg ((i+1,j)\land(i,j+1)) \\ \land \neg ((i+1,j)\land (i,j-1)) \\ \land \neg ((i-1,j)\land(i,j+1)) \\ \land \neg ((i-1,j)\land(i,j-1)) \\ \land \neg ((i,j+1)\land(i,j-1))
 \\ \text{}
-\\\equiv (\neg (i+1,j)\lor \neg(i-1,j)) 
+\\\equiv \\
+\\ \text{}
+\\ (\neg (i+1,j)\lor \neg(i-1,j)) 
 \\ \land (\neg(i+1,j)\lor \neg(i,j+1)) 
 \\ \land (\neg(i+1,j)\lor \neg(i,j-1)) 
 \\ \land (\neg(i-1,j)\lor \neg(i,j+1)) 
@@ -94,67 +112,67 @@ $$
 la règle est donc:
 
 $$
-(i,j) \Rightarrow (1) \land (2)
-\\ \text{}
-\\ \equiv (i,j) \Rightarrow
-\\ ((i+1,j) \lor (i-1,j) \lor (i,j+1) \lor (i,j-1)) \\  
-\\ \land (\neg (i+1,j)\lor \neg(i-1,j)) 
-\\ \land (\neg(i+1,j)\lor \neg(i,j+1)) 
-\\ \land (\neg(i+1,j)\lor \neg(i,j-1)) 
-\\ \land (\neg(i-1,j)\lor \neg(i,j+1)) 
-\\ \land (\neg(i-1,j)\lor \neg(i,j-1)) 
-\\ \land (\neg(i,j+1)\lor \neg(i,j-1))
+  (i,j) \Rightarrow (1) \land (2)
+  \\ \text{}
+  \\ \equiv 
+  \\ \text{}
+  \\ (i,j) \Rightarrow ((i+1,j) \lor (i-1,j) \lor (i,j+1) \lor (i,j-1)) \\  
+  \\ \land (\neg (i+1,j)\lor \neg(i-1,j)) 
+  \\ \land (\neg(i+1,j)\lor \neg(i,j+1)) 
+  \\ \land (\neg(i+1,j)\lor \neg(i,j-1)) 
+  \\ \land (\neg(i-1,j)\lor \neg(i,j+1)) 
+  \\ \land (\neg(i-1,j)\lor \neg(i,j-1)) 
+  \\ \land (\neg(i,j+1)\lor \neg(i,j-1))
 $$
 on applique $A \Rightarrow B \equiv \neg A \lor B$
 
 $$
-\\ \equiv \neg (i,j) \lor \big[
-\\ ((i+1,j) \lor (i-1,j) \lor (i,j+1) \lor (i,j-1)) \\  
-\\ \land (\neg (i+1,j)\lor \neg(i-1,j)) 
-\\ \land (\neg(i+1,j)\lor \neg(i,j+1)) 
-\\ \land (\neg(i+1,j)\lor \neg(i,j-1)) 
-\\ \land (\neg(i-1,j)\lor \neg(i,j+1)) 
-\\ \land (\neg(i-1,j)\lor \neg(i,j-1)) 
-\\ \land (\neg(i,j+1)\lor \neg(i,j-1))
-\\ \big]
-\\ \text{}
-\\ \equiv
-\\ \text{[} \neg(i,j) \lor (i+1,j) \lor (i-1,j) \lor (i,j+1) \lor (i,j-1)] \\  
-\\ \land [\neg(i,j) \lor \neg (i+1,j)\lor \neg(i-1,j)] 
-\\ \land [\neg(i,j) \lor \neg(i+1,j)\lor \neg(i,j+1)]
-\\ \land [\neg(i,j) \lor \neg(i+1,j)\lor \neg(i,j-1)] 
-\\ \land [\neg(i,j) \lor \neg(i-1,j)\lor \neg(i,j+1)] 
-\\ \land [\neg(i,j) \lor \neg(i-1,j)\lor \neg(i,j-1)] 
-\\ \land [\neg(i,j) \lor \neg(i,j+1)\lor \neg(i,j-1)]
+  \\ \equiv \neg (i,j) \lor \big[
+  \\ ((i+1,j) \lor (i-1,j) \lor (i,j+1) \lor (i,j-1)) \\  
+  \\ \land (\neg (i+1,j)\lor \neg(i-1,j)) 
+  \\ \land (\neg(i+1,j)\lor \neg(i,j+1)) 
+  \\ \land (\neg(i+1,j)\lor \neg(i,j-1)) 
+  \\ \land (\neg(i-1,j)\lor \neg(i,j+1)) 
+  \\ \land (\neg(i-1,j)\lor \neg(i,j-1)) 
+  \\ \land (\neg(i,j+1)\lor \neg(i,j-1))
+  \\ \big]
+$$
+
+Donc finalement :
+
+$$
+  \\ \text{[} \neg(i,j) \lor (i+1,j) \lor (i-1,j) \lor (i,j+1) \lor (i,j-1)] \\  
+  \\ \land [\neg(i,j) \lor \neg (i+1,j)\lor \neg(i-1,j)] 
+  \\ \land [\neg(i,j) \lor \neg(i+1,j)\lor \neg(i,j+1)]
+  \\ \land [\neg(i,j) \lor \neg(i+1,j)\lor \neg(i,j-1)] 
+  \\ \land [\neg(i,j) \lor \neg(i-1,j)\lor \neg(i,j+1)] 
+  \\ \land [\neg(i,j) \lor \neg(i-1,j)\lor \neg(i,j-1)] 
+  \\ \land [\neg(i,j) \lor \neg(i,j+1)\lor \neg(i,j-1)]
+  \\
+
 $$
 
 Il faut donc appliquer cela pour chaque case.  
 N'oublions pas le cas spécial des case au bors de la grille. Deux aproches possibles:  
 
-1) modifier la regle des case du bord pour que la case colorié adjacente soit sur le terrain.  
-2) garder la même règle pour les cases au bord et rejouter une ligne de cases autour du terain.
+1) Modifier la règle des cases du bord pour que la case colorié adjacente soit sur le terrain.  
+2) Garder la même règle pour les cases au bord et rajouter une ligne de cases autour du terrain.
 
-Nous prennons la deuxième option car elle ne rajoute pas beaucoup de calcul au solveur sat et nous évite de faire des cas particuliers.
-Pour cela nous acceptons les cases de coordonés (0,j), (n+1,j), (i,0), (i, n+1), $ i,j \in [1,n]$ . On rajouteras alors les conditions:
+Nous avons choisis de partir sur la première options, en ajoutant quelques cas particulier dans le code.
 
-$$
-\overset{n}{\underset{i=1}{\Large \land}} \big( \space \neg (i,0) \land \neg (i,n+1) \space \big)
-\land \overset{n}{\underset{j=1}{\Large \land}} \big( \space \neg (0,j) \land \neg (n+1,j) \space \big)
-$$
+---
 
-
-#### Règle 1)
+#### Formalisation Règle 1)
 
 *note: $\{C_j \mid 0\leq j < n\}$ est l'ensemble des cases de la zone z de n éléments*
 
-##### Un exemple :
-Soit z une zone.  
-- Cas z, une zone de 5 éléments {A,B,C,D,E}.  
+##### Exemple pour comprendre règle 1)
+Soit z une zone de 5 éléments {A,B,C,D,E}.  
 
 On sait qu'il doit y avoir exactement 2 cases coloriées dans la zone :  
-Une stratégie pour modeliser cette règle est de divide et impera :  
+Une stratégie pour modeliser cette règle est de `divide et impera` :  
 
-**On sépare la règle "exactement 2" en : $\text{Au moins 2 } \land \text{ Au plus 2}$**   
+**On sépare la règle "exactement 2" en :** Au moins 2 $ \land $ Au plus 2.  
 (On fait ça, car on a essayé de directement faire une règle "exactement 2" mais elle était beaucoup trop longue)
 
 **Au moins 2** :  
@@ -169,68 +187,78 @@ $$
 
 $$
 \neg (A \land B \land C) \land \neg (A \land B \land D) \land \neg (A \land B \land E) \\
-\land \neg (A \land C \land D) \land \neg (A \land C \land E) \land \neg (A \land D \land E) \\ \land \neg (B \land C \land D) \land \neg (B \land C \land E) \land \neg (B \land D \land E) \\ \land \neg (C)\land D \land E)\\
+\land \neg (A \land C \land D) \land \neg (A \land C \land E) \land \neg (A \land D \land E) \\ \land \neg (B \land C \land D) \land \neg (B \land C \land E) \land \neg (B \land D \land E) \\ \land \neg (C \land D \land E)\\
 \text{} \\ 
 \equiv \\
+\text{} \\ 
 (\neg A \lor \neg B \lor \neg C) \land (\neg A \lor \neg B \lor \neg D) \land (\neg A \lor \neg B \lor \neg E) \\
 \land (\neg A \lor \neg C \lor \neg D) \land (\neg A \lor \neg C \lor \neg E) \land(\neg A \lor \neg D \lor \neg E) \\
 \land (\neg C \lor \neg D \lor \neg E)
 $$
 
-##### Cas général:
+---
 
+##### Cas général Règle 1):
 Nous devons maintenant généraliser la règle et nous proposons de l'écrire comme suit:
 
-
-**au moins 2**
+**Au moins 2**
 
 $$
 \overset{n}{\underset{i=1}{\Large \land}}\big( \space \overset{n}{\underset{\underset{\scriptsize j\neq i}{j=1}}{\Large \lor}}(C_j) \space \big)
 $$
 
+---
+
+###### Preuve que cette formule au moins 2 est correct (facultatif)
 **Preuve que la formule fonctionne :**  
 Supposons qu'il existe $C_a$ et $C_b$ vrai.
 on a :
 
 $$
-\\ \overset{n}{\underset{i=1}{\Large \land}}\big( \space \overset{n}{\underset{\underset{\scriptsize j \neq i}{j=1}}{\Large \lor}}(C_j) \space \big)
-\\
-\\ \equiv \big( \space \overset{n}{\underset{\underset{\scriptsize j \neq a}{j = 1}}{\Large \lor}}(C_j) \big)
-\\
-\\ \land \overset{n}{\underset{\underset{\scriptsize i \neq a}{i=1}}{\Large \land}}\big( \space \overset{n}{\underset{\underset{\scriptsize j\neq i}{j=1}}{\Large \lor}}(C_j) \space \big)
-\\
-\\ \equiv \big(\big(\overset{n}{\underset{\underset{\scriptsize j\neq a,b}{j=1}}{\Large \lor}}C_j \space \big) \lor \underset{\color{LimeGreen} \text{vrai}}{C_b} \big)
-\\ \land \overset{n}{\underset{\underset{\scriptsize i \neq a}{i=1}}{\Large \land}}\big( \space \overset{n}{\underset{\underset{\scriptsize j\neq i,a}{j=1}}{\Large \lor}}(C_j) \lor \underset{\color{LimeGreen} \text{vrai}}{C_a}\space \big) \equiv \top
-$$
+\overset{n}{\underset{i=1}{\Large \land}}\big( \space \overset{n}{\underset{\underset{\scriptsize j \neq i}{j=1}}{\Large \lor}}(C_j) \space \big)
 
+\equiv \big( \space \overset{n}{\underset{\underset{\scriptsize j \neq a}{j = 1}}{\Large \lor}}(C_j) \big)
 
-**au plus 2**
+\land \overset{n}{\underset{\underset{\scriptsize i \neq a}{i=1}}{\Large \land}}\big( \space \overset{n}{\underset{\underset{\scriptsize j\neq i}{j=1}}{\Large \lor}}(C_j) \space \big)
+\\
+\equiv \big(\big(\overset{n}{\underset{\underset{\scriptsize j\neq a,b}{j=1}}{\Large \lor}}C_j \space \big) \lor \underset{\color{LimeGreen} \text{vrai}}{C_b} \big)
+\land \overset{n}{\underset{\underset{\scriptsize i \neq a}{i=1}}{\Large \land}}\big( \space \overset{n}{\underset{\underset{\scriptsize j\neq i,a}{j=1}}{\Large \lor}}(C_j) \lor \underset{\color{LimeGreen} \text{vrai}}{C_a}\space \big) \equiv \top
 
 $$
-\\ \overset{n}{\underset {\underset {\underset {\underset{\scriptsize j \neq k}{\scriptsize i \neq k}}{\scriptsize i \neq j}}{i,j,k=1}}{\Large \land}} 
-\\ \neg \big( C_i \land C_j \land C_k \big)\\
-\\ \equiv \\
-\\ \overset{n}{\underset {\underset {\underset {\underset{\scriptsize j \neq k}{\scriptsize i \neq k}}{\scriptsize i \neq j}}{i,j,k=1}}{\Large \land}} 
-\\ \big( \neg C_i \lor \neg C_j \lor \neg C_k \big)\\
-$$
+---
 
+**Au plus 2**
+
+$$
+\overset{n}{\underset {\underset {\underset {\underset{\scriptsize j \neq k}{\scriptsize i \neq k}}{\scriptsize i \neq j}}{i,j,k=1}}{\Large \land}} 
+\neg \big( C_i \land C_j \land C_k \big)\\
+\equiv \\
+\overset{n}{\underset {\underset {\underset {\underset{\scriptsize j \neq k}{\scriptsize i \neq k}}{\scriptsize i \neq j}}{i,j,k=1}}{\Large \land}} 
+\big( \neg C_i \lor \neg C_j \lor \neg C_k \big)\\
+$$
+---
 
 ### Modelisation sous forme normale conjonctive.
 
+Donc au final, quand on regroupe toutes nos clauses, on a :
+
 $$
-\\ \text{[} \neg(i,j) \lor (i+1,j) \lor (i-1,j) \lor (i,j+1) \lor (i,j-1)] \\  
-\\ \land [\neg(i,j) \lor \neg (i+1,j)\lor \neg(i-1,j)] 
-\\ \land [\neg(i,j) \lor \neg(i+1,j)\lor \neg(i,j+1)]
-\\ \land [\neg(i,j) \lor \neg(i+1,j)\lor \neg(i,j-1)] 
-\\ \land [\neg(i,j) \lor \neg(i-1,j)\lor \neg(i,j+1)] 
-\\ \land [\neg(i,j) \lor \neg(i-1,j)\lor \neg(i,j-1)] 
-\\ \land [\neg(i,j) \lor \neg(i,j+1)\lor \neg(i,j-1)] 
-\\ \land 
-\\ \overset{n}{\underset{i=1}{\Large \land}}\big( \space \overset{n}{\underset{\underset{\scriptsize j\neq i}{j=1}}{\Large \lor}}(C_j) \space \big)
-\\ \land
-\\ \overset{n}{\underset {\underset {\underset {\underset{\scriptsize j \neq k}{\scriptsize i \neq k}}{\scriptsize i \neq j}}{i,j,k=1}}{\Large \land}} 
-\\ \big( \neg C_i \lor \neg C_j \lor \neg C_k \big)\\
+
+  \\ \text{[} \neg(i,j) \lor (i+1,j) \lor (i-1,j) \lor (i,j+1) \lor (i,j-1)] \\  
+  \\ \land [\neg(i,j) \lor \neg (i+1,j)\lor \neg(i-1,j)] 
+  \\ \land [\neg(i,j) \lor \neg(i+1,j)\lor \neg(i,j+1)]
+  \\ \land [\neg(i,j) \lor \neg(i+1,j)\lor \neg(i,j-1)] 
+  \\ \land [\neg(i,j) \lor \neg(i-1,j)\lor \neg(i,j+1)] 
+  \\ \land [\neg(i,j) \lor \neg(i-1,j)\lor \neg(i,j-1)] 
+  \\ \land [\neg(i,j) \lor \neg(i,j+1)\lor \neg(i,j-1)] 
+  \\ \land 
+  \\ \overset{n}{\underset{i=1}{\Large \land}}\big( \space \overset{n}{\underset{\underset{\scriptsize j\neq i}{j=1}}{\Large \lor}}(C_j) \space \big)
+  \\ \land
+  \\ \overset{n}{\underset {\underset {\underset {\underset{\scriptsize j \neq k}{\scriptsize i \neq k}}{\scriptsize i \neq j}}{i,j,k=1}}{\Large \land}} 
+\big( \neg C_i \lor \neg C_j \lor \neg C_k \big)\\
 $$
+
+---
 
 ## Les programmes.
 ### Formalisation d'un problème dans un fichier.
@@ -239,7 +267,7 @@ Nous avons choisis la structure de fichier suivant pour modeliser nos grilles :
 
 ```:fichier.liz
 hauteur(nombre entier positif);
-largeur(nobmre entier positif);
+largeur(nombre entier positif);
 nb_zone(nombre entier positif non nulle);
 numero_zone_case_1_1;..............;numero_zone_case_L_1;
 ........................................................;
@@ -270,7 +298,7 @@ ou bien :
 ```
 
 Ce qui donne la grille suivante :  
-![clipboard.png](imgs_CR/rgRuoyrc4-clipboard.png)
+![clipboard.png](rgRuoyrc4-clipboard.png)
 ### Parsing du fichier en Python :
 
 ```python:parsing_fichier_liz.py
@@ -444,24 +472,84 @@ let mon_jeu = lire_fichier file;; (* on parse le fichier *)
 print_jeu mon_jeu;; (*affichage de jeu*)
 ```
 
+Pour la suite du projet, nous avons choisis de continuer en Ocaml.
 
 ### Formalisation d'une entree en logique propositionnelle.
 
-Maintenant que nous avons une matrice en Python ou bien un dictionnaire en OCaml representant notre instance, nous devons la transformée forme de logique propositionnelle.
+Maintenant que nous avons une matrice en Python ou bien un dictionnaire en Ocaml representant notre instance, nous devons la transformée en forme de logique propositionnelle.
+
+#### Règle 1) 
+Nous avons réalisé une fonction recursive "dimacs_case_de_colonnes" qui s'occupe de parcourir une colonnes et d'appliquer la règle 1 sur chaque case de la colonne.  
+Elle est appelée par "dimacs_colonnes"
+
+#### Règle 2) & 3)
+Pour la règle 2 on appelle 
 
 ### Conversion d'une instance au format DIMACS.
+Pour convertir dans le fichier DIMACS, on fait simplement des Printf.fprintf dans le fichier .dimacs en même temps que notre formalisation.
 
 ### Afficheur de solution.
+Notre afficheur de solution prend le fichier .res donnée par minisat et va afficher un tableau dans lequel il va mettre des `.` pour des cases vide et des `#` pour des cases coloriées.
+
 ### Programme principale qui utilise les autre progs.
+Notre programme principale est main.ml il commence par recuperer les arguments puis crée les futures noms des fichiers .res, .dimacs et .visu ensuite il fait la formalisation et la transformation en DIMACS par la même ocassion, apres ça, il lance minisat avec le fichier .dimacs et enfin il utilise la solution de minisat pour créer le fichier .visu.
 
 ## Les instances tests
 ### instance basique probleme simplifiée
-### instance normal avec la majorité des cas de figure
-### instance problématique avec cas de figure critiques
-### instance avec tout les cas de figure
-### ...
+```liz:grille_simple.liz
+6;6;8;
+1;1;2;2;2;3;
+1;1;1;1;2;3;
+4;1;1;1;5;5;
+4;1;1;6;6;5;
+1;1;6;6;6;6;
+8;8;6;7;7;7;
+
+```
+Représente une grille basique de 6 par 6 avec 8 zones.
+
+### instance normal avec tout les cas de figure
+```liz:semi_grosse_grille.liz
+10;10;20;
+1;1;1;2;3;3;3;4;5;5;
+6;1;2;2;2;3;3;4;5;5;
+6;7;7;2;2;2;8;8;8;5;
+6;9;9;9;2;10;10;8;5;5;
+6;9;11;2;2;10;12;5;5;12;
+11;11;11;11;11;11;12;12;12;12;
+13;13;11;11;15;15;16;16;17;17;
+13;13;13;11;15;18;16;16;19;17;
+13;13;20;20;15;18;19;19;19;19;
+13;13;20;20;15;15;19;19;19;19;
+```
+Représente une grille plus complexe avec tous les cas de figures que nous avons observé.
+
+### instances problématique avec cas de figure critiques
+```liz:grille_1_case.liz
+1;1;1;1
+```
+Représente une grille de une seule case, qui est censé ne pas avoir de solutions.
+
+```liz:grille_2_cases.liz
+2;1;1;1;1
+```
+Une grille avec deux cases, soit une seule solution unique. 
+
+### instance avec un nombre de clause énorme
+```liz:grille_immense_mais_simple.liz
+50;50;1;
+1;1;1;1;..........;1;
+.                  .
+.                  .
+.                  .
+1;1;1;1;..........;1;
+```
+On essaye avec une très grosse grille pour voir si notre systeme est capable de résoudre malgrès une nombre de clause énorme.
+
+-> **Pour l'instant il y a un problème avec ce cas de figure, une division par 0 que nous ne comprenons pas**
 
 ## Soutenance.
+A faire ...
 ### Présentation du jeu.
 ### Explication transformation des règles en logique.
 ### Explication des algorithmes.
