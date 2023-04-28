@@ -111,18 +111,18 @@ let dimacs_zone_au_plus_2 (file:out_channel) (j:jeu) : unit =
             let (l,h,_,zl) = j in
             List.iter (fun z -> applique_au_plus_sur_une_zone file l h z 3 "") zl 
             
-let b (file:out_channel) (l:largeur) (case_a_ignorer:case) (c:case):unit =
+let iterateur_2_au_moin_2 (file:out_channel) (l:largeur) (case_a_ignorer:case) (c:case):unit =
             if (c = case_a_ignorer)
                         then ()
                         else let (x,y) = c in
                             Printf.fprintf file "%d " (coord_to_case x y l)
 
-let a (file:out_channel) (z:zone) (fonction_a_iterer: case -> case -> unit) (c:case) : unit = 
+let iterateur_1_au_moin_2 (file:out_channel) (z:zone) (fonction_a_iterer: case -> case -> unit) (c:case) : unit = 
             List.iter (fonction_a_iterer c) z;
             Printf.fprintf file "0\n"
 
 let applique_au_moins_sur_une_zone (file:out_channel) (l:largeur) (z:zone): unit =
-            List.iter (a file z (b file l)) z;
+            List.iter (iterateur_1_au_moin_2 file z (iterateur_2_au_moin_2 file l)) z;
             ()
 
 
